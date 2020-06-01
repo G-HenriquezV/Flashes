@@ -70,7 +70,7 @@ def delete_flashcard(flashcard_id):
     :param flashcard_id: ID of the flashcard to delete
     """
     control.delete_flashcard(flashcard_id)
-    print('The flashcard has been deleted')
+    print(f'Flashcard(id={flashcard_id}) has been deleted')
 
 
 @cli.command()
