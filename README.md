@@ -1,1 +1,2 @@
 # Flashes
+Learning project. WIP.
