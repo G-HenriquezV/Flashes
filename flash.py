@@ -19,7 +19,7 @@ class Flashcard(Base):
     title = Column(String)
     content = Column(String)
     date = Column(DateTime)
-    is_done = Column(Boolean)
+    is_checked = Column(Boolean)
 
     def __init__(self, title: str, content: str, date: Optional[datetime] = None):
         self.title = title
@@ -27,10 +27,10 @@ class Flashcard(Base):
         if date is None:
             date = datetime.today()
         self.date = date
-        self.is_done = False
+        self.is_checked = False
 
     def __str__(self):
-        ttl = f'{self.id} - {self.title} {"(Done)" if self.is_done else ""}'
+        ttl = f'{self.id} - {self.title} {"(Done)" if self.is_checked else ""}'
         date = self.date.strftime('%b %d %Y')
         return f'{ttl}\n{date}\n\n{self.content}'
 
@@ -38,7 +38,7 @@ class Flashcard(Base):
         """
         Changes between checked and unchecked
         """
-        if self.is_done:
-            self.is_done = False
+        if self.is_checked:
+            self.is_checked = False
         else:
-            self.is_done = True
+            self.is_checked = True

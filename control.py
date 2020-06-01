@@ -18,8 +18,8 @@ def list_flashcards() -> List[Tuple[int, str]]:
     :return: List every id and title of every flashcard in the db
     """
     flashcards = []
-    for flashcard in session().query(Flashcard):
-        flashcard.append(flashcard.id, flashcard.title)
+    for flashcard in session.query(Flashcard):
+        flashcards.append((flashcard.id, flashcard.title))
     return flashcards
 
 
@@ -77,4 +77,5 @@ def check_flashcard(flashcard_id):
     """
     flashcard = get_flashcard(flashcard_id)
     flashcard.check()
-    return flashcard.is_done
+    session.commit()
+    return flashcard.is_checked
