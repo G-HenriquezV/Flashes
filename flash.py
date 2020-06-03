@@ -2,7 +2,6 @@
 Flashcard model
 """
 from datetime import datetime
-from typing import Optional
 
 from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from sqlalchemy.ext.declarative import declarative_base
@@ -18,27 +17,27 @@ class Flashcard(Base):
     id = Column(Integer, primary_key=True)
     title = Column(String)
     content = Column(String)
-    date = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.now)
     is_checked = Column(Boolean)
 
-    def __init__(self, title: str, content: str, date: Optional[datetime] = None):
-        self.title = title
-        self.content = content
-        if date is None:
-            date = datetime.today()
-        self.date = date
-        self.is_checked = False
+    # def __init__(self, title: str, content: str, created_at: Optional[datetime] = None):
+    #     self.title = title
+    #     self.content = content
+    #     if created_at is None:
+    #         created_at = datetime.today()
+    #     self.created_at = created_at
+    #     self.is_checked = False
 
     def __str__(self):
         ttl = f'{self.id} - {self.title} {"(Done)" if self.is_checked else ""}'
-        date = self.date.strftime('%b %d %Y')
+        date = self.created_at.strftime('%b %d %Y')
         return f'{ttl}\n{date}\n\n{self.content}'
 
-    def check(self):
-        """
-        Changes between checked and unchecked
-        """
-        if self.is_checked:
-            self.is_checked = False
-        else:
-            self.is_checked = True
+    # def check(self):
+    #     """
+    #     Changes between checked and unchecked
+    #     """
+    #     if self.is_checked:
+    #         self.is_checked = False
+    #     else:
+    #         self.is_checked = True

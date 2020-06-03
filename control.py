@@ -2,7 +2,7 @@
 Actions using the Flashcard class
 """
 from datetime import datetime
-from typing import Optional, List, Tuple
+from typing import Optional, List, Tuple, Iterator
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -13,17 +13,14 @@ engine = create_engine('sqlite:///flash.db', echo=False)
 session = sessionmaker(bind=engine)()
 
 
-def list_flashcards() -> List[Tuple[int, str]]:
+def list_flashcards() -> Iterator[Tuple[int, str]]:
     """
     :return: List every id and title of every flashcard in the db
     """
-    flashcards = []
-    for flashcard in session.query(Flashcard):
-        flashcards.append((flashcard.id, flashcard.title))
-    return flashcards
+    return ((flashcard.id, flashcard.title) for flashcard in session.query(Flashcard))
 
 
-def add_flashcard(title: str, content: str, date: Optional[datetime] = None):
+def add_flashcard(title: str, content: str, date: Optional[datetime] = None) -> None:
     """
     Adds a new flashcard to the db
 
@@ -31,7 +28,7 @@ def add_flashcard(title: str, content: str, date: Optional[datetime] = None):
     :param content: Content of the flashcard
     :param date: Optional argument. Date of the flashcard.
     """
-    flashcard = Flashcard(title, content, date)
+    flashcard = Flashcard(title=title, content=content, created_at=date)
     session.add(flashcard)
     session.commit()
 
@@ -76,6 +73,6 @@ def check_flashcard(flashcard_id):
     :return: New status of the flashcard
     """
     flashcard = get_flashcard(flashcard_id)
-    flashcard.check()
+    flashcard.is_checked = not flashcard.is_checked
     session.commit()
     return flashcard.is_checked
